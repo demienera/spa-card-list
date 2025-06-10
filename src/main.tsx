@@ -5,6 +5,7 @@ import { App } from "./components/App/App";
 import { store } from "./app/store";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./app/config/themeConfig";
 
 const container = document.getElementById("root");
 
@@ -15,7 +16,9 @@ if (container) {
     <StrictMode>
       <Provider store={store}>
         <BrowserRouter>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </BrowserRouter>
       </Provider>
     </StrictMode>,

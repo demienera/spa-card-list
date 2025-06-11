@@ -24,6 +24,7 @@ export type Game = {
   released: string;
   platforms: PlatformWrapper[];
   tags: Tag[];
+  slug: string;
 };
 
 export type GameResponse = {

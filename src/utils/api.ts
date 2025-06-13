@@ -9,8 +9,17 @@ const checkResponse = async <T>(res: Response): Promise<T> => {
   throw new Error(typeof err === "string" ? err : JSON.stringify(err));
 };
 
-export const getGamesApi = async (): Promise<Game[]> => {
-  const res = await fetch(`${BASE_URL}/games?key=${API_KEY}`);
-  const data = await checkResponse<GameResponse>(res);
-  return data.results;
+export const getGamesApi = async (
+  page: number = 1,
+  pageSize: number = 20,
+): Promise<GameResponse> => {
+  const res = await fetch(
+    `${BASE_URL}/games?key=${API_KEY}&lang=ru&page=${page}&page_size=${pageSize}`,
+  );
+  return checkResponse<GameResponse>(res);
+};
+
+export const getGameByIdApi = async (id: number): Promise<Game> => {
+  const res = await fetch(`${BASE_URL}/games/${id}?key=${API_KEY}&lang=ru`);
+  return checkResponse<Game>(res);
 };

@@ -1,4 +1,3 @@
-import bgImage from "../../assets/image/bg.jpg";
 import { HeroSection } from "../../components/HeroSection";
 
 export const HomePage = () => {
@@ -8,7 +7,7 @@ export const HomePage = () => {
       subtitle="От хардкора до казуала — всё на одной полке"
       buttonText="Перейти в каталог"
       buttonLink="/products"
-      backgroundImage={bgImage}
+      backgroundImage={"/bg.jpg"}
     />
   );
 };

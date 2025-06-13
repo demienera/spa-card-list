@@ -28,5 +28,6 @@ export type Game = {
 };
 
 export type GameResponse = {
+  count: number;
   results: Game[];
 };

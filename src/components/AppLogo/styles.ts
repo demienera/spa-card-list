@@ -8,7 +8,7 @@ export const useLogoStyles = () => {
 
   return {
     logo: {
-      fontFamily: token.logoFont,
+      fontFamily: token.fontFamilySecondary,
       fontSize: 27,
       fontWeight: "bold",
       color: "inherit",

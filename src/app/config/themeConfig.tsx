@@ -12,10 +12,14 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
         algorithm: theme.darkAlgorithm,
         token: {
           colorPrimary: "#f72585",
-          colorBgBase: "#0e0e10",
           colorTextBase: "#f0f0f0",
-          fontFamily: "'Rubik', sans-serif",
-          logoFont: "'Orbitron', sans-serif",
+          colorTextSecondary: "#b0b0b0",
+          colorTextHeading: "#fff",
+          colorBorder: "#434343",
+          colorBgContainer: "#121212",
+          colorBgBase: "#0e0e10",
+          fontFamilyBase: "'Rubik', sans-serif",
+          fontFamilySecondary: "'Orbitron', sans-serif",
         },
         components: {
           Typography: {

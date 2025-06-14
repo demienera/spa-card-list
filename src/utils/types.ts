@@ -17,6 +17,7 @@ export type Game = {
   id: number;
   background_image: string;
   description: string;
+  description_raw: string;
   developers: Developer[];
   genres: Genre[];
   name: string;
@@ -25,9 +26,20 @@ export type Game = {
   platforms: PlatformWrapper[];
   tags: Tag[];
   slug: string;
+  stores: Stores[];
 };
 
 export type GameResponse = {
   count: number;
   results: Game[];
+};
+
+type Stores = {
+  id: number;
+  store: Store;
+};
+
+type Store = {
+  domain: string;
+  name: string;
 };

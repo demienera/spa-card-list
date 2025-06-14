@@ -23,3 +23,9 @@ export const getGameByIdApi = async (id: number): Promise<Game> => {
   const res = await fetch(`${BASE_URL}/games/${id}?key=${API_KEY}&lang=ru`);
   return checkResponse<Game>(res);
 };
+
+export const getGameScreenshotsApi = async (id: number): Promise<string[]> => {
+  const res = await fetch(`${BASE_URL}/games/${id}/screenshots?key=${API_KEY}`);
+  const data = await checkResponse<{ results: { image: string }[] }>(res);
+  return data.results.map(s => s.image);
+};

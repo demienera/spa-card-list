@@ -15,7 +15,7 @@ export const CardsGrid = ({ games, isFavoriteView, onDelete }: Props) => {
   if (!games.length) {
     return (
       <Row style={styles.emptyWrapper}>
-        <Empty description="В избранном пусто" />
+        <Empty description={isFavoriteView ? "В избранном пусто" : "Нет игр"} />
       </Row>
     );
   }
@@ -24,11 +24,7 @@ export const CardsGrid = ({ games, isFavoriteView, onDelete }: Props) => {
     <Row gutter={[16, 24]}>
       {games.map(game => (
         <Col key={game.id} xs={24} sm={12} md={8} lg={6}>
-          <CardItem
-            item={game}
-            isFavoriteView={isFavoriteView}
-            onDelete={onDelete}
-          />
+          <CardItem item={game} onDelete={onDelete} />
         </Col>
       ))}
     </Row>

@@ -11,25 +11,22 @@ import { LikeButton } from "../LikeButton";
 import { CardFooter } from "../CardFooter";
 import { useCardItemStyles } from "./styles";
 import { Game } from "../../utils/types";
+import { usePublicPath } from "../../hooks/usePublicPath";
 
 const { Meta } = Card;
 const { Text } = Typography;
 
 type CardItemProps = {
   item: Game;
-  isFavoriteView?: boolean;
   onDelete: (id: number) => void;
 };
 
-export const CardItem = ({
-  item,
-  isFavoriteView = false,
-  onDelete,
-}: CardItemProps) => {
+export const CardItem = ({ item, onDelete }: CardItemProps) => {
   const dispatch = useAppDispatch();
   const styles = useCardItemStyles();
   const favorites = useAppSelector(favoritesSelector);
   const liked = favorites.includes(item.id);
+  const placeholderImage = usePublicPath("placeholder.webp");
 
   const handleLikeToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -51,7 +48,7 @@ export const CardItem = ({
         cover={
           <img
             alt={item.name}
-            src={item.background_image || "/placeholder.webp"}
+            src={item.background_image || placeholderImage}
             style={styles.cardImg}
             onError={e => {
               const target = e.target as HTMLImageElement;

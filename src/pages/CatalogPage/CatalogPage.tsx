@@ -1,89 +1,63 @@
-import { useEffect, useState } from "react";
-import { Spin } from "antd";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import {
-  fetchFavoriteGamesThunk,
-  fetchGamesThunk,
-  clearFavoriteGames,
-  removeGame,
-} from "../../app/slices/games/slice";
-import {
-  gamesSelector,
-  favoriteGamesSelector,
-  totalGamesSelector,
-  isLoadingGamesSelector,
-  isFavoritesLoadingSelector,
-} from "../../app/slices/games/slice";
-import { favoritesSelector } from "../../app/slices/favorites/slice";
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import { CardsGrid } from "../../components/CardsGrid";
 import { ItemsPagination } from "../../components/ItemsPagination";
 import { CategoriesToggle } from "../../components/CategoriesToggle";
-import { MAX_PAGES, PAGE_SIZE } from "./constants";
+import { useCatalogData } from "../../hooks/useCatalogData";
 import { useCatalogPageStyles } from "./styles";
+import { ContentLoader } from "../../components/ContentLoader";
+import { MAX_PAGES, PAGE_SIZE } from "./constants";
 
-export const CatalogPage = () => {
-  const dispatch = useAppDispatch();
+const CatalogPage = () => {
+  const navigate = useNavigate();
   const styles = useCatalogPageStyles();
-  const [showFavorites, setShowFavorites] = useState(false);
-  const [page, setPage] = useState(1);
-
-  const favorites = useAppSelector(favoritesSelector);
-  const games = useAppSelector(gamesSelector);
-  const favoriteGames = useAppSelector(favoriteGamesSelector);
-  const total = useAppSelector(totalGamesSelector);
-  const isLoading = useAppSelector(isLoadingGamesSelector);
-  const isFavoritesLoading = useAppSelector(isFavoritesLoadingSelector);
-
-  const displayedGames = showFavorites
-    ? favoriteGames.filter(g => favorites.includes(g.id))
-    : games;
-  const isEmpty = !displayedGames.length;
-  const isLoadingData = showFavorites ? isFavoritesLoading : isLoading;
-
-  useEffect(() => {
-    if (!showFavorites) {
-      dispatch(fetchGamesThunk(page)).unwrap();
-    }
-  }, [dispatch, page, showFavorites]);
-
-  const handleShowFavorites = (value: "all" | "favorites") => {
-    const show = value === "favorites";
-    setShowFavorites(show);
-
-    if (show) {
-      favorites.length
-        ? dispatch(fetchFavoriteGamesThunk(favorites))
-        : dispatch(clearFavoriteGames());
-    }
-  };
-
-  const handleDelete = (id: number) => dispatch(removeGame(id));
+  const {
+    displayedGames,
+    total,
+    isEmpty,
+    isLoadingData,
+    showFavorites,
+    page,
+    setPage,
+    handleShowFavorites,
+    handleDelete,
+  } = useCatalogData();
+  const totalPage = Math.min(total, PAGE_SIZE * MAX_PAGES);
 
   return (
     <div style={styles.container}>
-      <CategoriesToggle
-        value={showFavorites ? "favorites" : "all"}
-        onChange={handleShowFavorites}
-      />
+      <div style={styles.catalogTop}>
+        <CategoriesToggle
+          value={showFavorites ? "favorites" : "all"}
+          onChange={handleShowFavorites}
+        />
+        <Button
+          type="primary"
+          onClick={() => navigate("/create-game")}
+          style={{ marginBottom: 16 }}
+        >
+          + Добавить игру
+        </Button>
+      </div>
 
-      {isLoadingData ? (
-        <Spin size="large" fullscreen style={styles.spin} />
-      ) : (
+      <ContentLoader loading={isLoadingData} isEmpty={isEmpty} fullscreen>
         <>
           <CardsGrid
             games={displayedGames}
-            isFavoriteView={showFavorites}
             onDelete={handleDelete}
+            isFavoriteView={showFavorites}
           />
-          {!showFavorites && !isEmpty && (
+          {!showFavorites && (
             <ItemsPagination
               currentPage={page}
-              total={Math.min(total, PAGE_SIZE * MAX_PAGES)}
+              total={totalPage}
               onChange={setPage}
             />
           )}
         </>
-      )}
+      </ContentLoader>
     </div>
   );
 };
+
+export default CatalogPage;

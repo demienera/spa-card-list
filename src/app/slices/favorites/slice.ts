@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
-import { removeFromFavorites } from "../games/slice";
 
 export type FavoritesState = {
   favorites: number[];
@@ -41,7 +40,6 @@ const favoritesSlice = createSlice({
 export const toggleFavoriteWithCleanup =
   (gameId: number) => (dispatch: AppDispatch) => {
     dispatch(toggleFavorite(gameId));
-    dispatch(removeFromFavorites(gameId));
   };
 
 export const { toggleFavorite, removeFavorite } = favoritesSlice.actions;

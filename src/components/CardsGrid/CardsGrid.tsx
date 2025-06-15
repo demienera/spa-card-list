@@ -1,7 +1,7 @@
 import { Row, Col, Empty } from "antd";
-import { Game } from "../../utils/types";
-import { CardItem } from "../CardItem";
 import { useCardsGridStyles } from "./styles";
+import { CardItem } from "../CardItem";
+import { Game } from "../../utils/types";
 
 type Props = {
   games: Game[];

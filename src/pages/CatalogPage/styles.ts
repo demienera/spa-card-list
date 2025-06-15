@@ -9,8 +9,15 @@ export const useCatalogPageStyles = () => {
   return {
     container: {
       maxWidth: 1400,
+      width: "100%",
+      marginInline: "auto",
       padding: "0 48px",
-    },
+    } as CSSProperties,
+    catalogTop: {
+      display: "flex",
+      justifyContent: "space-between",
+      width: "100%",
+    } as CSSProperties,
     title: {
       margin: 0,
       maxWidth: 700,
@@ -28,6 +35,13 @@ export const useCatalogPageStyles = () => {
     } as CSSProperties,
     button: {
       marginTop: token.marginMD,
+    } as CSSProperties,
+    spinContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "calc(100vh - 252px)",
+      width: "100%",
     } as CSSProperties,
     spin: {
       width: "100%",

@@ -18,7 +18,8 @@ export const useDetailsPageStyles = () => {
       padding: 64,
     } as CSSProperties,
     container: {
-      maxWidth: 1200,
+      maxWidth: 1100,
+      width: "100%",
       marginInline: "auto",
       padding: 32,
       backgroundColor: token.colorBgContainer,

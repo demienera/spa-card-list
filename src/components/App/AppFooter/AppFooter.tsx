@@ -1,5 +1,5 @@
 import { Layout, Typography } from "antd";
-import { getFullYear } from "../../utils/utils";
+import { getFullYear } from "../../../utils/utils";
 import { useAppFooterStyles } from "./styles";
 
 const { Footer } = Layout;

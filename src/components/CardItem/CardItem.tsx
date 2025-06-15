@@ -6,11 +6,11 @@ import {
   favoritesSelector,
   toggleFavoriteWithCleanup,
 } from "../../app/slices/favorites/slice";
+import { DeleteButton } from "../DeleteButton";
 import { LikeButton } from "../LikeButton";
 import { CardFooter } from "../CardFooter";
-import { DeleteButton } from "../DeleteButton";
-import { Game } from "../../utils/types";
 import { useCardItemStyles } from "./styles";
+import { Game } from "../../utils/types";
 
 const { Meta } = Card;
 const { Text } = Typography;
@@ -75,7 +75,7 @@ export const CardItem = ({
             </Text>
           }
         />
-        <CardFooter game={item} styles={styles} />
+        <CardFooter game={item} />
       </Card>
     </Link>
   );

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getGamesApi, getGameByIdApi } from "../../../utils/api";
 import { Game } from "../../../utils/types";
+import { RootState } from "../../store";
 
 export const fetchGamesThunk = createAsyncThunk(
   "games/getGames",
@@ -17,17 +18,26 @@ export const fetchGamesThunk = createAsyncThunk(
 
 export const fetchFavoriteGamesThunk = createAsyncThunk(
   "games/fetchFavorites",
-  async (ids: number[], { rejectWithValue }) => {
+  async (ids: number[], { rejectWithValue, getState }) => {
     try {
-      const results = await Promise.all(
-        ids.map(id =>
-          getGameByIdApi(id).catch(e => {
-            console.error(`Failed to fetch game ${id}:`, e);
-            return null;
-          }),
-        ),
+      const state = getState() as RootState;
+
+      const localIds = ids.filter(id => id < 0);
+      const apiIds = ids.filter(id => id > 0);
+
+      const localGames = state.games.allGames.filter(game =>
+        localIds.includes(game.id),
       );
-      return results.filter(Boolean) as Game[];
+
+      const gamesToFetch = apiIds.filter(
+        id => !state.games.allGames.some(game => game.id === id),
+      );
+
+      const apiGames = await Promise.all(
+        gamesToFetch.map(id => getGameByIdApi(id).catch(() => null)),
+      );
+
+      return [...localGames, ...(apiGames.filter(Boolean) as Game[])];
     } catch (e) {
       return rejectWithValue(
         e instanceof Error ? e.message : "Failed to fetch favorites",
@@ -36,10 +46,13 @@ export const fetchFavoriteGamesThunk = createAsyncThunk(
   },
 );
 
+const savedGames: Game[] = JSON.parse(
+  localStorage.getItem("createdGames") || "[]",
+);
+
 export type GamesState = {
   allGames: Game[];
   currentGames: Game[];
-  favoriteGames: Game[];
   isLoading: boolean;
   isFavoritesLoading: boolean;
   total: number;
@@ -48,9 +61,8 @@ export type GamesState = {
 };
 
 const initialState: GamesState = {
-  allGames: [],
+  allGames: savedGames,
   currentGames: [],
-  favoriteGames: [],
   isLoading: false,
   isFavoritesLoading: false,
   total: 0,
@@ -62,35 +74,24 @@ const gamesSlice = createSlice({
   name: "games",
   initialState,
   selectors: {
-    gamesSelector: state => state.currentGames,
     allGamesSelector: state => state.allGames,
-    favoriteGamesSelector: state => state.favoriteGames,
     isLoadingGamesSelector: state => state.isLoading,
     isFavoritesLoadingSelector: state => state.isFavoritesLoading,
     totalGamesSelector: state => state.total,
+    currentGamesSelector: state => state.currentGames,
   },
   reducers: {
     removeGame(state, action: PayloadAction<number>) {
       state.allGames = state.allGames.filter(
         game => game.id !== action.payload,
       );
-      state.favoriteGames = state.favoriteGames.filter(
-        game => game.id !== action.payload,
-      );
-      state.currentGames = state.currentGames.filter(
-        game => game.id !== action.payload,
-      );
     },
-    clearError(state) {
-      state.error = null;
-    },
-    clearFavoriteGames(state) {
-      state.favoriteGames = [];
-    },
-    removeFromFavorites: (state, action: PayloadAction<number>) => {
-      state.favoriteGames = state.favoriteGames.filter(
-        game => game.id !== action.payload,
-      );
+    addCreatedGame: (state, action: PayloadAction<Game>) => {
+      const id = action.payload.id;
+      if (!state.allGames.some(g => g.id === id)) {
+        state.allGames.unshift(action.payload);
+        localStorage.setItem("createdGames", JSON.stringify(state.allGames));
+      }
     },
   },
   extraReducers: builder => {
@@ -105,15 +106,15 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchGamesThunk.fulfilled, (state, action) => {
         const newGames = action.payload.results;
-        state.currentGames = newGames;
         state.currentPage = action.meta.arg;
+        state.currentGames = newGames;
 
         const existingIds = new Set(state.allGames.map(g => g.id));
         const uniqueNewGames = newGames.filter(
           game => !existingIds.has(game.id),
         );
-        state.allGames = [...state.allGames, ...uniqueNewGames];
 
+        state.allGames = [...state.allGames, ...uniqueNewGames];
         state.total = action.payload.count;
         state.isLoading = false;
       })
@@ -126,24 +127,24 @@ const gamesSlice = createSlice({
       })
       .addCase(fetchFavoriteGamesThunk.fulfilled, (state, action) => {
         state.isFavoritesLoading = false;
-        const newFavorites = action.payload;
-        state.favoriteGames = newFavorites;
+
+        const newGames = action.payload.filter(game => game.id > 0);
+        const existingIds = new Set(state.allGames.map(g => g.id));
+        const uniqueNewGames = newGames.filter(
+          game => !existingIds.has(game.id),
+        );
+
+        state.allGames = [...state.allGames, ...uniqueNewGames];
       });
   },
 });
 
 export const {
-  gamesSelector,
   allGamesSelector,
-  favoriteGamesSelector,
+  currentGamesSelector,
   isLoadingGamesSelector,
   isFavoritesLoadingSelector,
   totalGamesSelector,
 } = gamesSlice.selectors;
-export const {
-  removeGame,
-  clearError,
-  clearFavoriteGames,
-  removeFromFavorites,
-} = gamesSlice.actions;
+export const { removeGame, addCreatedGame } = gamesSlice.actions;
 export default gamesSlice.reducer;

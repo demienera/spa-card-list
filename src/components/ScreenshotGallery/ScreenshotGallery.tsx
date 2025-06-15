@@ -1,4 +1,4 @@
-import { Image } from "antd";
+import { Empty, Image } from "antd";
 import { useScreenshotGalleryStyles } from "./styles";
 
 interface ScreenshotGalleryProps {
@@ -8,7 +8,9 @@ interface ScreenshotGalleryProps {
 export const ScreenshotGallery = ({ screenshots }: ScreenshotGalleryProps) => {
   const styles = useScreenshotGalleryStyles();
 
-  if (!screenshots?.length) return null;
+  if (!screenshots || screenshots.length === 0) {
+    return <Empty description="Нет скриншотов" />;
+  }
 
   return (
     <div style={styles.container}>

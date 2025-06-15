@@ -29,3 +29,18 @@ export const getGameScreenshotsApi = async (id: number): Promise<string[]> => {
   const data = await checkResponse<{ results: { image: string }[] }>(res);
   return data.results.map(s => s.image);
 };
+export const getGenresApi = async (): Promise<{
+  results: { id: number; name: string }[];
+}> => {
+  const res = await fetch(`${BASE_URL}/genres?key=${API_KEY}&lang=ru`);
+  return checkResponse(res);
+};
+
+export const getPlatformsApi = async (): Promise<{
+  results: { id: number; name: string }[];
+}> => {
+  const res = await fetch(
+    `${BASE_URL}/platforms/lists/parents?key=${API_KEY}&lang=ru`,
+  );
+  return checkResponse(res);
+};

@@ -1,3 +1,3 @@
-import "./App.css";
+import { AppLayout } from "../Layout";
 
-export const App = () => {};
+export const App = () => <AppLayout />;

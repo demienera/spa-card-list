@@ -3,8 +3,10 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "./components/App/App";
 import { store } from "./app/store";
-import "./index.css";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./app/config/themeConfig";
+import { App as AntdApp } from "antd";
+import "./index.css";
 
 const container = document.getElementById("root");
 
@@ -13,11 +15,15 @@ if (container) {
 
   root.render(
     <StrictMode>
-      <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </Provider>
+      <AntdApp>
+        <Provider store={store}>
+          <BrowserRouter>
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
+          </BrowserRouter>
+        </Provider>
+      </AntdApp>
     </StrictMode>,
   );
 } else {

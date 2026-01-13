@@ -3,7 +3,7 @@ import { CSSProperties } from "react";
 export const useCategoriesToggleStyles = () => {
   return {
     radioGroup: {
-      marginBottom: 24,
+      marginBottom: 0,
     } as CSSProperties,
   };
 };

@@ -19,8 +19,8 @@ export const GameImage = ({ src, alt }: GameImageProps) => {
       {showPlaceholder ? (
         <ImagePlaceholder
           text="Картинка не загрузилась"
-          icon={<PictureOutlined style={{ fontSize: 52, color: "#999" }} />}
-          style={{ backgroundColor: "#e8e8e8" }}
+          icon={<PictureOutlined style={styles.placeholderIcon} />}
+          style={styles.placeholderStyle}
         />
       ) : (
         <Image

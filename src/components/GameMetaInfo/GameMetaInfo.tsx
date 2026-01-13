@@ -2,18 +2,21 @@
 import { GameMetaBlock } from "../../components/GameMetaBlock";
 import { GameMetaTextBlock } from "../../components/GameMetaTextBlock";
 import { Game } from "../../utils/types";
+import { useGameMetaInfoStyles } from "./styles";
 
 interface GameMetaInfoProps {
   game?: Game;
 }
 
 export const GameMetaInfo = ({ game }: GameMetaInfoProps) => {
+  const styles = useGameMetaInfoStyles();
+
   if (!game) {
     return null;
   }
 
   return (
-    <div style={{ display: "flex", gap: 20, flexDirection: "column" }}>
+    <div style={styles.container}>
       <GameMetaBlock
         label="Жанры:"
         items={game.genres?.map(g => g.name) || []}

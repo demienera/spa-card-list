@@ -7,7 +7,12 @@ import {
   InputNumber,
   DatePicker,
   Button,
+  Space,
+  Typography,
 } from "antd";
+
+const { TextArea } = Input;
+const { Text } = Typography;
 import type { Dayjs } from "dayjs";
 import { useAppDispatch } from "../../app/hooks";
 import { SelectField } from "./fields/SelectField";
@@ -16,6 +21,7 @@ import { InputImageField } from "./fields/InputImageField";
 import { useGameForm } from "../../hooks/useGameForm";
 import { Game } from "../../utils/types";
 import { addCreatedGame } from "../../app/slices/games/slice";
+import { useGameFormStyles } from "./GameForm/styles";
 
 interface GameFormValues {
   name: string;
@@ -29,10 +35,21 @@ interface GameFormValues {
   screenshots?: string[];
 }
 
-export const GameForm = () => {
+interface GameFormProps {
+  onSuccess?: () => void;
+  showCancel?: boolean;
+  onCancel?: () => void;
+}
+
+export const GameForm = ({
+  onSuccess,
+  showCancel = false,
+  onCancel,
+}: GameFormProps) => {
   const [form] = Form.useForm();
   const { localGenres, localPlatforms } = useGameForm();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const styles = useGameFormStyles();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { notification } = AntdApp.useApp();
@@ -70,7 +87,12 @@ export const GameForm = () => {
       description: `Игра "${newGame.name}" успешно добавлена!`,
       placement: "topRight",
     });
-    navigate("/games");
+
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      navigate("/games");
+    }
   };
 
   return (
@@ -81,20 +103,78 @@ export const GameForm = () => {
       <Form.Item
         name="description_raw"
         label="Описание"
-        rules={[{ required: true }]}
+        rules={[
+          { required: true },
+          { max: 500, message: "Описание не должно превышать 500 символов" },
+        ]}
+        extra={
+          <Form.Item shouldUpdate noStyle>
+            {({ getFieldValue }) => {
+              const description = getFieldValue("description_raw") || "";
+              const length = description.length;
+              return (
+                <Text
+                  type={length > 500 ? "danger" : "secondary"}
+                  style={styles.counterText}
+                >
+                  {length}/500
+                </Text>
+              );
+            }}
+          </Form.Item>
+        }
       >
-        <Input.TextArea rows={4} />
+        <TextArea
+          rows={4}
+          maxLength={500}
+          showCount={false}
+          style={styles.textArea}
+        />
       </Form.Item>
       <Form.Item
         name="released"
         label="Дата релиза"
         rules={[{ required: true }]}
       >
-        <DatePicker style={{ width: "100%" }} />
+        <DatePicker style={styles.datePicker} />
       </Form.Item>
       <InputImageField />
-      <Form.Item name="rating" label="Рейтинг">
-        <InputNumber min={0} max={10} step={0.1} style={{ width: "100%" }} />
+      <Form.Item
+        name="rating"
+        label="Рейтинг"
+        rules={[
+          {
+            type: "number",
+            min: 0,
+            max: 5,
+            message: "Рейтинг должен быть от 0 до 5",
+          },
+        ]}
+      >
+        <InputNumber
+          min={0}
+          max={5}
+          step={0.1}
+          precision={1}
+          placeholder="0.0 - 5.0"
+          style={styles.inputNumber}
+          parser={value => {
+            if (!value) return "";
+            const parsed = parseFloat(value);
+            if (isNaN(parsed)) return "";
+            if (parsed < 0) return "0";
+            if (parsed > 5) return "5";
+            return Math.round(parsed * 10) / 10;
+          }}
+          formatter={value => {
+            if (!value) return "";
+            const num = parseFloat(value.toString());
+            if (isNaN(num)) return "";
+            if (num < 0) return "0";
+            if (num > 5) return "5";
+            return num.toFixed(1);
+          }}
+        />
       </Form.Item>
       <SelectField name="genres" label="Жанры" options={localGenres} />
       <SelectField
@@ -107,9 +187,12 @@ export const GameForm = () => {
       </Form.Item>
       <ScreenshotField />
       <Form.Item>
-        <Button type="primary" htmlType="submit" loading={isSubmitting}>
-          Создать игру
-        </Button>
+        <Space>
+          <Button type="primary" htmlType="submit" loading={isSubmitting}>
+            Создать игру
+          </Button>
+          {showCancel && onCancel && <Button onClick={onCancel}>Отмена</Button>}
+        </Space>
       </Form.Item>
     </Form>
   );

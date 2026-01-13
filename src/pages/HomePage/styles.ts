@@ -1,0 +1,157 @@
+import { theme } from "antd";
+import { CSSProperties } from "react";
+
+const { useToken } = theme;
+
+export const useHomePageStyles = () => {
+  const { token } = useToken();
+
+  return {
+    container: {
+      width: "100%",
+      minHeight: "calc(100vh - 64px - 70px)",
+    } as CSSProperties,
+    heroSection: (bgImage: string): CSSProperties => ({
+      position: "relative",
+      width: "100%",
+      minHeight: "60vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundImage: `linear-gradient(135deg, rgba(17, 24, 39, 0.85) 0%, rgba(31, 41, 55, 0.8) 50%, rgba(139, 92, 246, 0.1) 100%), url(${bgImage})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "fixed",
+      padding: "80px 48px",
+      marginBottom: 48,
+      borderRadius: "0 0 32px 32px",
+      overflow: "hidden",
+    }),
+    heroContent: {
+      maxWidth: 1200,
+      width: "100%",
+      textAlign: "center" as const,
+      zIndex: 1,
+      position: "relative" as const,
+    } as CSSProperties,
+    heroTitle: {
+      fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
+      fontWeight: 700,
+      background:
+        "linear-gradient(135deg, #ffffff 0%, #e5e7eb 50%, #a78bfa 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      backgroundClip: "text",
+      marginBottom: 24,
+      textShadow: "0 2px 8px rgba(139, 92, 246, 0.2)",
+      letterSpacing: "-0.02em",
+      lineHeight: 1.2,
+      animation: "fadeInUp 0.8s ease-out",
+    } as CSSProperties,
+    heroSubtitle: {
+      fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)",
+      color: token.colorTextBase,
+      marginBottom: 40,
+      opacity: 0.95,
+      maxWidth: 700,
+      margin: "0 auto 40px",
+      animation: "fadeInUp 0.8s ease-out 0.2s both",
+    } as CSSProperties,
+    heroButtons: {
+      animation: "fadeInUp 0.8s ease-out 0.4s both",
+    } as CSSProperties,
+    primaryButton: {
+      height: 50,
+      padding: "0 32px",
+      fontSize: 16,
+      fontWeight: 600,
+      borderRadius: 12,
+      background: "rgba(139, 92, 246, 0.15)",
+      border: "1px solid rgba(139, 92, 246, 0.3)",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+      backdropFilter: "blur(10px)",
+    } as CSSProperties,
+    secondaryButton: {
+      height: 50,
+      padding: "0 32px",
+      fontSize: 16,
+      fontWeight: 600,
+      borderRadius: 12,
+      background: "rgba(255, 255, 255, 0.1)",
+      border: "1px solid rgba(255, 255, 255, 0.2)",
+      color: "#ffffff",
+      backdropFilter: "blur(10px)",
+    } as CSSProperties,
+    statsSection: {
+      maxWidth: 1400,
+      width: "100%",
+      margin: "0 auto 64px",
+      padding: "0 48px",
+    } as CSSProperties,
+    statCard: {
+      background: "linear-gradient(135deg, #1f2937 0%, #111827 100%)",
+      border: "1px solid rgba(99, 102, 241, 0.2)",
+      borderRadius: 16,
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      height: "100%",
+    } as CSSProperties,
+    createButton: {
+      height: "auto",
+      padding: "16px 24px",
+      fontSize: 16,
+      fontWeight: 600,
+      borderRadius: 12,
+      background: "linear-gradient(135deg, #00d4ff 0%, #0099ff 100%)",
+      border: "none",
+      boxShadow:
+        "0 4px 20px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.3)",
+    } as CSSProperties,
+    gamesSection: {
+      maxWidth: 1400,
+      width: "100%",
+      margin: "0 auto",
+      padding: "0 48px 64px",
+    } as CSSProperties,
+    sectionHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 32,
+      flexWrap: "wrap" as const,
+      gap: 16,
+    } as CSSProperties,
+    sectionTitle: {
+      margin: 0,
+      fontSize: "clamp(1.75rem, 4vw, 2.5rem)",
+      fontWeight: 700,
+      background: "linear-gradient(135deg, #ffffff 0%, #a78bfa 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      backgroundClip: "text",
+    } as CSSProperties,
+    viewAllButton: {
+      fontSize: 16,
+      fontWeight: 600,
+      color: token.colorPrimary,
+      padding: 0,
+      height: "auto",
+    } as CSSProperties,
+    viewAllWrapper: {
+      display: "flex",
+      justifyContent: "center",
+      marginTop: 48,
+    } as CSSProperties,
+    viewAllButtonLarge: {
+      height: 50,
+      padding: "0 40px",
+      fontSize: 16,
+      fontWeight: 600,
+      borderRadius: 12,
+      background: "rgba(139, 92, 246, 0.15)",
+      border: "1px solid rgba(139, 92, 246, 0.3)",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.2)",
+      backdropFilter: "blur(10px)",
+    } as CSSProperties,
+  };
+};

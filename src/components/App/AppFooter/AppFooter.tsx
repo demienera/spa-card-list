@@ -10,7 +10,17 @@ export const AppFooter = () => {
 
   return (
     <Footer style={styles.footer}>
-      <Text>MyGames ©{getFullYear()} Created by Ksenia Volkova</Text>
+      <Text>
+        MyGames ©{getFullYear()} Created by{" "}
+        <a
+          href="https://github.com/demienera"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={styles.link}
+        >
+          demienera
+        </a>
+      </Text>
     </Footer>
   );
 };

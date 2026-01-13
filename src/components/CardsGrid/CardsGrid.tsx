@@ -7,9 +7,15 @@ type Props = {
   games: Game[];
   isFavoriteView: boolean;
   onDelete: (id: number) => void;
+  showDelete?: boolean;
 };
 
-export const CardsGrid = ({ games, isFavoriteView, onDelete }: Props) => {
+export const CardsGrid = ({
+  games,
+  isFavoriteView,
+  onDelete,
+  showDelete = true,
+}: Props) => {
   const styles = useCardsGridStyles();
 
   if (!games.length) {
@@ -24,7 +30,7 @@ export const CardsGrid = ({ games, isFavoriteView, onDelete }: Props) => {
     <Row gutter={[16, 24]}>
       {games.map(game => (
         <Col key={game.id} xs={24} sm={12} md={8} lg={6}>
-          <CardItem item={game} onDelete={onDelete} />
+          <CardItem item={game} onDelete={onDelete} showDelete={showDelete} />
         </Col>
       ))}
     </Row>

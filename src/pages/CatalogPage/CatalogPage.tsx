@@ -1,16 +1,19 @@
+import { useEffect, useState } from "react";
 import { Button } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { CardsGrid } from "../../components/CardsGrid";
 import { ItemsPagination } from "../../components/ItemsPagination";
 import { CategoriesToggle } from "../../components/CategoriesToggle";
 import { useCatalogData } from "../../hooks/useCatalogData";
 import { useCatalogPageStyles } from "./styles";
 import { ContentLoader } from "../../components/ContentLoader";
+import { CreateGameModal } from "../../components/CreateGameModal";
 import { MAX_PAGES, PAGE_SIZE } from "./constants";
 
 const CatalogPage = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
   const styles = useCatalogPageStyles();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const {
     displayedGames,
     total,
@@ -24,6 +27,12 @@ const CatalogPage = () => {
   } = useCatalogData();
   const maxTotalItems = Math.min(total, MAX_PAGES * PAGE_SIZE);
 
+  useEffect(() => {
+    if (location.state?.showFavorites && !showFavorites) {
+      handleShowFavorites("favorites");
+    }
+  }, [location.state, showFavorites, handleShowFavorites]);
+
   return (
     <div style={styles.container}>
       <div style={styles.catalogTop}>
@@ -33,29 +42,40 @@ const CatalogPage = () => {
         />
         <Button
           type="primary"
-          onClick={() => navigate("/create-game")}
-          style={{ marginBottom: 16 }}
+          onClick={() => setIsCreateModalOpen(true)}
+          style={styles.addButton}
         >
           + Добавить игру
         </Button>
       </div>
 
-      <ContentLoader loading={isLoadingData} isEmpty={isEmpty} fullscreen>
-        <>
-          <CardsGrid
-            games={displayedGames}
-            onDelete={handleDelete}
-            isFavoriteView={showFavorites}
-          />
-          {!showFavorites && (
-            <ItemsPagination
-              currentPage={page}
-              total={maxTotalItems}
-              onChange={setPage}
+      <CreateGameModal
+        open={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
+
+      <div style={styles.contentWrapper}>
+        <ContentLoader
+          loading={isLoadingData}
+          isEmpty={isEmpty}
+          fullscreen={false}
+        >
+          <>
+            <CardsGrid
+              games={displayedGames}
+              onDelete={handleDelete}
+              isFavoriteView={showFavorites}
             />
-          )}
-        </>
-      </ContentLoader>
+            {!showFavorites && (
+              <ItemsPagination
+                currentPage={page}
+                total={maxTotalItems}
+                onChange={setPage}
+              />
+            )}
+          </>
+        </ContentLoader>
+      </div>
     </div>
   );
 };

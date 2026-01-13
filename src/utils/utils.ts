@@ -8,7 +8,7 @@ export const formatDate = (dateStr: string) => {
 };
 
 export const getRatingColor = (rating: number) => {
-  if (rating >= 4) return "green";
-  if (rating >= 3) return "orange";
-  return "red";
+  if (rating >= 4) return "#10b981";
+  if (rating >= 3) return "#f59e0b";
+  return "#ef4444";
 };

@@ -1,15 +1,23 @@
+import { theme } from "antd";
 import { CSSProperties } from "react";
 
+const { useToken } = theme;
+
 export const useCardFooterStyles = () => {
+  const { token } = useToken();
+
   return {
     cardContent: {
-      marginTop: 12,
+      marginTop: 16,
+      display: "flex",
+      flexDirection: "column" as const,
+      gap: 10,
     } as CSSProperties,
     cardGenreWrapper: {
-      marginTop: 8,
       display: "flex",
       alignItems: "center",
       overflow: "hidden",
+      gap: 8,
     } as CSSProperties,
     cardGenre: {
       overflow: "hidden",
@@ -17,16 +25,23 @@ export const useCardFooterStyles = () => {
       textOverflow: "ellipsis",
       display: "inline",
       maxWidth: "100%",
+      color: token.colorTextSecondary,
+      fontSize: 13,
     } as CSSProperties,
     cardTag: {
-      marginRight: 6,
       flexShrink: 0,
+      color: token.colorTextSecondary,
+      fontSize: 14,
     } as CSSProperties,
     cardDataWrapper: {
-      marginTop: 8,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
     } as CSSProperties,
     cardDataIcon: {
-      marginRight: 6,
+      flexShrink: 0,
+      color: token.colorTextSecondary,
+      fontSize: 14,
     } as CSSProperties,
   };
 };

@@ -27,6 +27,12 @@ export type Game = {
   tags?: Tag[];
   slug?: string;
   screenshots?: string[];
+  metacritic?: number;
+  playtime?: number;
+  publishers?: Developer[];
+  esrb_rating?: { name: string };
+  reviews_count?: number;
+  website?: string;
 };
 
 export type GameResponse = {

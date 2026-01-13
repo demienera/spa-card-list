@@ -19,9 +19,14 @@ const { Text } = Typography;
 type CardItemProps = {
   item: Game;
   onDelete: (id: number) => void;
+  showDelete?: boolean;
 };
 
-export const CardItem = ({ item, onDelete }: CardItemProps) => {
+export const CardItem = ({
+  item,
+  onDelete,
+  showDelete = true,
+}: CardItemProps) => {
   const dispatch = useAppDispatch();
   const styles = useCardItemStyles();
   const favorites = useAppSelector(favoritesSelector);
@@ -41,24 +46,29 @@ export const CardItem = ({ item, onDelete }: CardItemProps) => {
   };
 
   return (
-    <Link to={`/game/${item.id}`} style={{ textDecoration: "none" }}>
+    <Link to={`/game/${item.id}`} style={styles.link}>
       <Card
         hoverable
         style={styles.card}
         cover={
-          <img
-            alt={item.name}
-            src={item.background_image || placeholderImage}
-            style={styles.cardImg}
-            onError={e => {
-              const target = e.target as HTMLImageElement;
-              target.onerror = null;
-              target.src = "/placeholder.webp";
-            }}
-          />
+          <div style={styles.coverWrapper}>
+            <img
+              alt={item.name}
+              src={item.background_image || placeholderImage}
+              style={styles.cardImg}
+              className="card-image"
+              onError={e => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = "/placeholder.webp";
+              }}
+            />
+          </div>
         }
       >
-        <DeleteButton onClick={handleDelete} style={styles.deleteIcon} />
+        {showDelete && (
+          <DeleteButton onClick={handleDelete} style={styles.deleteIcon} />
+        )}
         <LikeButton
           liked={liked}
           onClick={handleLikeToggle}

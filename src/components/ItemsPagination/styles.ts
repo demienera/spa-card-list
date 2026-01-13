@@ -4,7 +4,9 @@ export const usePaginationStyles = () => {
   return {
     conteiner: {
       textAlign: "center",
-      marginTop: 30,
+      marginTop: 48,
+      marginBottom: 32,
+      padding: "24px 0",
     } as CSSProperties,
   };
 };

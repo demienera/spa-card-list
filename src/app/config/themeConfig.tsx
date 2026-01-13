@@ -11,26 +11,46 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
       theme={{
         algorithm: theme.darkAlgorithm,
         token: {
-          colorPrimary: "#f72585",
-          colorTextBase: "#f0f0f0",
-          colorTextSecondary: "#b0b0b0",
-          colorTextHeading: "#fff",
-          colorBorder: "#434343",
-          colorBgContainer: "#121212",
-          colorBgBase: "#0e0e10",
+          colorPrimary: "#8b5cf6",
+          colorSuccess: "#10b981",
+          colorWarning: "#f59e0b",
+          colorError: "#ef4444",
+          colorInfo: "#6366f1",
+          colorTextBase: "#e5e7eb",
+          colorTextSecondary: "#9ca3af",
+          colorTextHeading: "#ffffff",
+          colorBorder: "#374151",
+          colorBgContainer: "#1f2937",
+          colorBgBase: "#111827",
+          colorBgElevated: "#1f2937",
+          borderRadius: 12,
+          borderRadiusLG: 16,
+          borderRadiusSM: 8,
           fontFamilyBase: "'Rubik', sans-serif",
           fontFamilySecondary: "'Orbitron', sans-serif",
+          boxShadow:
+            "0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)",
+          boxShadowSecondary:
+            "0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3)",
         },
         components: {
           Typography: {
             fontFamily: "'Rubik', sans-serif",
           },
           Button: {
-            borderRadius: 8,
+            borderRadius: 12,
+            fontWeight: 500,
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.3)",
           },
           Layout: {
-            headerBg: "#121212",
-            footerBg: "#121212",
+            headerBg: "rgba(31, 41, 55, 0.8)",
+            footerBg: "rgba(31, 41, 55, 0.8)",
+          },
+          Card: {
+            borderRadius: 16,
+            paddingLG: 24,
+            boxShadow:
+              "0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.1)",
           },
         },
       }}

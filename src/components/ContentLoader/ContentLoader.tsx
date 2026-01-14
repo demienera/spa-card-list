@@ -1,4 +1,5 @@
 import { Spin, Empty } from "antd";
+import { useContentLoaderStyles } from "./styles";
 
 interface Props {
   loading: boolean;
@@ -13,13 +14,21 @@ export const ContentLoader = ({
   children,
   fullscreen = false,
 }: Props) => {
+  const styles = useContentLoaderStyles(fullscreen);
+
   if (loading) {
     return (
-      <Spin size="large" fullscreen={fullscreen} style={{ paddingTop: 80 }} />
+      <div style={styles.loaderStyle}>
+        <Spin size="large" />
+      </div>
     );
   }
   if (isEmpty) {
-    return <Empty description="Здесь ничего нет" />;
+    return (
+      <div style={styles.emptyWrapper}>
+        <Empty description="Здесь ничего нет" />
+      </div>
+    );
   }
-  return <>{children}</>;
+  return <div style={styles.childrenWrapper}>{children}</div>;
 };

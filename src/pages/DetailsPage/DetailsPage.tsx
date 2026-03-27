@@ -31,22 +31,24 @@ import { ContentLoader } from "../../components/ContentLoader";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
   toggleFavorite,
-  favoritesSelector,
+  favoritesGamesSelector,
 } from "../../app/slices/favorites/slice";
 import { formatDate, getRatingColor } from "../../utils/utils";
 import { usePublicPath } from "../../hooks/usePublicPath";
+import { Game } from "../../utils/types";
 
 const DetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const numericId = id ? Number(id) : undefined;
   const styles = useDetailsPageStyles();
   const dispatch = useAppDispatch();
-  const favorites = useAppSelector(favoritesSelector);
+  const favorites = useAppSelector(favoritesGamesSelector);
   const placeholderImage = usePublicPath("placeholder.webp");
 
   const { game, screenshots, loading, error } = useGameDetails(numericId);
   const isEmpty = !game && !loading && !error;
-  const isFavorite = game ? favorites.includes(game.id) : false;
+  const favoriteGame = favorites.some((game: Game) => game.id === game?.id);
+  const isFavorite = game ? favoriteGame : false;
 
   const handleToggleFavorite = () => {
     if (game) {

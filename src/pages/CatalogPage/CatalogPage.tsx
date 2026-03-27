@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "antd";
-import { useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { CardsGrid } from "../../components/CardsGrid";
 import { ItemsPagination } from "../../components/ItemsPagination";
 import { CategoriesToggle } from "../../components/CategoriesToggle";
@@ -11,34 +11,35 @@ import { CreateGameModal } from "../../components/CreateGameModal";
 import { MAX_PAGES, PAGE_SIZE } from "./constants";
 
 const CatalogPage = () => {
-  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const styles = useCatalogPageStyles();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const viewParam = searchParams.get("view");
+  const showFavorites = useMemo(() => viewParam === "favorites", [viewParam]);
   const {
     displayedGames,
     total,
     isEmpty,
     isLoadingData,
-    showFavorites,
     page,
     setPage,
-    handleShowFavorites,
     handleDelete,
-  } = useCatalogData();
+  } = useCatalogData(showFavorites);
   const maxTotalItems = Math.min(total, MAX_PAGES * PAGE_SIZE);
 
-  useEffect(() => {
-    if (location.state?.showFavorites && !showFavorites) {
-      handleShowFavorites("favorites");
-    }
-  }, [location.state, showFavorites, handleShowFavorites]);
+  const handleViewChange = (value: "all" | "favorites") => {
+    const next = new URLSearchParams(searchParams);
+    if (value === "favorites") next.set("view", "favorites");
+    else next.delete("view");
+    setSearchParams(next, { replace: true });
+  };
 
   return (
     <div style={styles.container}>
       <div style={styles.catalogTop}>
         <CategoriesToggle
           value={showFavorites ? "favorites" : "all"}
-          onChange={handleShowFavorites}
+          onChange={handleViewChange}
         />
         <Button
           type="primary"

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, Typography } from "antd";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import {
-  favoritesSelector,
+  favoritesGamesSelector,
   toggleFavorite,
 } from "../../app/slices/favorites/slice";
 import { DeleteButton } from "../DeleteButton";
@@ -29,8 +29,8 @@ export const CardItem = ({
 }: CardItemProps) => {
   const dispatch = useAppDispatch();
   const styles = useCardItemStyles();
-  const favorites = useAppSelector(favoritesSelector);
-  const liked = favorites.includes(item.id);
+  const favorites = useAppSelector(favoritesGamesSelector);
+  const liked = favorites.some((game: Game) => game.id === item.id);
   const placeholderImage = usePublicPath("placeholder.webp");
 
   const handleLikeToggle = (e: React.MouseEvent) => {

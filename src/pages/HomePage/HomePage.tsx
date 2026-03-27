@@ -12,7 +12,7 @@ import {
   currentGamesSelector,
   totalGamesSelector,
 } from "../../app/slices/games/slice";
-import { favoritesSelector } from "../../app/slices/favorites/slice";
+import { favoritesGamesSelector } from "../../app/slices/favorites/slice";
 import { CardsGrid } from "../../components/CardsGrid";
 import { CreateGameModal } from "../../components/CreateGameModal";
 import { usePublicPath } from "../../hooks/usePublicPath";
@@ -30,7 +30,7 @@ const HomePage = () => {
 
   const currentGames = useAppSelector(currentGamesSelector);
   const totalGames = useAppSelector(totalGamesSelector);
-  const favorites = useAppSelector(favoritesSelector);
+  const favorites = useAppSelector(favoritesGamesSelector);
 
   useEffect(() => {
     if (currentGames.length === 0) {
@@ -68,7 +68,7 @@ const HomePage = () => {
                 size="large"
                 icon={<HeartOutlined />}
                 onClick={() =>
-                  navigate("/games", { state: { showFavorites: true } })
+                  navigate("/games?view=favorites")
                 }
                 style={styles.secondaryButton}
               >

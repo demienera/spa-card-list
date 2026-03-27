@@ -46,7 +46,6 @@ const favoritesSlice = createSlice({
   name: "favorites",
   initialState,
   selectors: {
-    favoritesSelector: state => state.favorites,
     favoritesGamesSelector: state => state.favoritesGames,
   },
   reducers: {
@@ -104,6 +103,5 @@ export const {
   setFavoritesGames,
   loadFavoritesFromStorage,
 } = favoritesSlice.actions;
-export const { favoritesSelector, favoritesGamesSelector } =
-  favoritesSlice.selectors;
+export const { favoritesGamesSelector } = favoritesSlice.selectors;
 export default favoritesSlice.reducer;
